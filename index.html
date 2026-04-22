@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Formulario Luxviajes</title>
+        <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo img {
+            max-width: 150px;
+            height: auto;
+            margin-bottom: 15px;
+        }
+
+        .logo p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="email"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+
+        .checkbox-group label {
+            margin: 0;
+            font-weight: 400;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .checkbox-terms {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        .checkbox-terms input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            cursor: pointer;
+            accent-color: #667eea;
+            flex-shrink: 0;
+        }
+
+        .checkbox-terms label {
+            margin: 0;
+            font-weight: 400;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 13px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+            text-align: center;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 15px;
+        }
+
+        .modal-header h2 {
+            color: #667eea;
+            font-size: 22px;
+            margin: 0;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .modal-body {
+            color: #333;
+            line-height: 1.8;
+            font-size: 14px;
+        }
+
+        .modal-body h3 {
+            color: #667eea;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .modal-body ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .modal-body li {
+            margin-bottom: 8px;
+        }
+
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid white;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .button-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+            }
+
+            .logo h1 {
+                font-size: 24px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 20% auto;
+            }
+        }
+    </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="logo">
+                <img src="logo.png" alt="Luxviajes">
+                <p>Bienvenido - Regístrate para continuar</p>
+            </div>
+
+            <div class="success-message" id="successMessage">
+                ¡Gracias! Tu registro ha sido enviado correctamente.
+            </div>
+
+            <form id="luxForm" onsubmit="handleSubmit(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">Nombre *</label>
+                        <input
+                            type="text"
+                            id="firstName"
+                            name="firstName"
+                            placeholder="Tu nombre"
+                            required>
+                        <div class="error-message" id="firstNameError"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lastName">Apellido *</label>
+                        <input
+                            type="text"
+                            id="lastName"
+                            name="lastName"
+                            placeholder="Tu apellido"
+                            required>
+                        <div class="error-message" id="lastNameError"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Correo Electrónico *</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="tu.email@ejemplo.com"
+                        required>
+                    <div class="error-message" id="emailError"></div>
+                </div>
+
+                <div class="checkbox-group">
+                    <input
+                        type="checkbox"
+                        id="promotional"
+                        name="promotional">
+                    <label for="promotional">Deseo recibir contenido promocional
+                        y ofertas especiales de Luxviajes</label>
+                </div>
+
+                <div class="checkbox-terms">
+                    <input
+                        type="checkbox"
+                        id="acceptTerms"
+                        name="acceptTerms"
+                        required>
+                    <label for="acceptTerms">
+                        Acepto los <span class="terms-link"
+                            onclick="openModal('termsModal')">Términos de
+                            Uso</span> y la <span class="terms-link"
+                            onclick="openModal('privacyModal')">Política de
+                            Privacidad</span> *
+                    </label>
+                </div>
+
+                <button type="submit">
+                    <div class="button-content">
+                        <span class="spinner" id="spinner"></span>
+                        <span id="buttonText">Enviar Registro</span>
+                    </div>
+                </button>
+            </form>
+        </div>
+
+        <!-- Modal: Términos de Uso -->
+        <div id="termsModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Términos de Uso</h2>
+                    <span class="close"
+                        onclick="closeModal('termsModal')">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <p>Última actualización: 22 de Abril de 2026</p>
+
+                    <h3>1. Aceptación de los Términos</h3>
+                    <p>Al acceder y utilizar el formulario de registro de Lux
+                        Viajes, aceptas estar vinculado por estos términos y
+                        condiciones. Si no estás de acuerdo con cualquier parte
+                        de estos términos, entonces no podrás usar nuestros
+                        servicios.</p>
+
+                    <h3>2. Uso del Servicio</h3>
+                    <p>Te comprometes a utilizar el formulario de registro
+                        únicamente para propósitos legales y de conformidad con
+                        todas las leyes, reglas y regulaciones aplicables.</p>
+
+                    <h3>3. Información del Usuario</h3>
+                    <p>La información que proporcionas debe ser precisa,
+                        completa y actual. Eres responsable de mantener la
+                        confidencialidad de tu información.</p>
+
+                    <h3>4. Contenido Promocional</h3>
+                    <p>Si decides recibir contenido promocional, podrás
+                        desuscribirse en cualquier momento utilizando el enlace
+                        proporcionado en los correos electrónicos.</p>
+
+                    <h3>5. Limitación de Responsabilidad</h3>
+                    <p>Luxviajes no será responsable por daños indirectos,
+                        incidentales, especiales, consecuentes o punitivos
+                        derivados del uso o la incapacidad de usar el formulario
+                        o los servicios.</p>
+
+                    <h3>6. Cambios en los Términos</h3>
+                    <p>Nos reservamos el derecho de modificar estos términos en
+                        cualquier momento. Tu uso continuado del formulario
+                        constituye tu aceptación de cualquier cambio.</p>
+
+                    <h3>7. Contacto</h3>
+                    <p>Si tienes preguntas sobre estos términos, por favor
+                        contáctanos a través de nuestro sitio web.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal: Política de Privacidad -->
+        <div id="privacyModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Política de Privacidad</h2>
+                    <span class="close"
+                        onclick="closeModal('privacyModal')">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <p>Última actualización: 22 de Abril de 2026</p>
+
+                    <h3>1. Recopilación de Información</h3>
+                    <p>Recopilamos información que proporcionas voluntariamente
+                        a través de nuestro formulario de registro,
+                        incluyendo:</p>
+                    <ul>
+                        <li>Nombre y apellido</li>
+                        <li>Correo electrónico</li>
+                        <li>Preferencias de comunicación</li>
+                    </ul>
+
+                    <h3>2. Uso de la Información</h3>
+                    <p>Utilizamos tu información para:</p>
+                    <ul>
+                        <li>Procesar tu registro</li>
+                        <li>Enviarte contenido promocional (si lo
+                            autorizaste)</li>
+                        <li>Mejorar nuestros servicios</li>
+                        <li>Comunicarnos contigo sobre cambios en nuestras
+                            políticas</li>
+                    </ul>
+
+                    <h3>3. Protección de Datos</h3>
+                    <p>Implementamos medidas de seguridad técnicas y
+                        organizativas para proteger tu información personal
+                        contra acceso no autorizado, alteración, divulgación o
+                        destrucción.</p>
+
+                    <h3>4. Compartir Información</h3>
+                    <p>No compartimos tu información personal con terceros,
+                        excepto cuando sea requerido por ley o con tu
+                        consentimiento explícito.</p>
+
+                    <h3>5. Retención de Datos</h3>
+                    <p>Retenemos tu información personal mientras sea necesario
+                        para proporcionar nuestros servicios y cumplir con
+                        nuestras obligaciones legales.</p>
+
+                    <h3>6. Tus Derechos</h3>
+                    <p>Tienes derecho a:</p>
+                    <ul>
+                        <li>Acceder a tus datos personales</li>
+                        <li>Solicitar la corrección de datos inexactos</li>
+                        <li>Solicitar la eliminación de tus datos</li>
+                        <li>Desuscribirte de comunicaciones promocionales</li>
+                    </ul>
+
+                    <h3>7. Contacto</h3>
+                    <p>Si tienes preguntas sobre esta política de privacidad,
+                        por favor contáctanos a través de nuestro sitio web.</p>
+                </div>
+            </div>
+        </div>
+
+        <script>
+        // API URL segura - No expone el webhook de n8n
+        const API_URL = '/api/registro';
+
+        // Funciones para modales
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Cerrar modal al hacer clic fuera
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+
+        // Validar email
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        // Limpiar mensajes de error
+        function clearErrors() {
+            document.querySelectorAll('.error-message').forEach(el => {
+                el.style.display = 'none';
+                el.textContent = '';
+            });
+        }
+
+        // Validar formulario
+        function validateForm() {
+            clearErrors();
+            let isValid = true;
+
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const acceptTerms = document.getElementById('acceptTerms').checked;
+
+            if (!firstName) {
+                document.getElementById('firstNameError').textContent = 'El nombre es requerido';
+                document.getElementById('firstNameError').style.display = 'block';
+                isValid = false;
+            }
+
+            if (!lastName) {
+                document.getElementById('lastNameError').textContent = 'El apellido es requerido';
+                document.getElementById('lastNameError').style.display = 'block';
+                isValid = false;
+            }
+
+            if (!email) {
+                document.getElementById('emailError').textContent = 'El correo es requerido';
+                document.getElementById('emailError').style.display = 'block';
+                isValid = false;
+            } else if (!isValidEmail(email)) {
+                document.getElementById('emailError').textContent = 'Por favor ingresa un correo válido';
+                document.getElementById('emailError').style.display = 'block';
+                isValid = false;
+            }
+
+            if (!acceptTerms) {
+                alert('Debes aceptar los Términos de Uso y la Política de Privacidad para continuar');
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        // Manejar envío del formulario
+        async function handleSubmit(event) {
+            event.preventDefault();
+
+            if (!validateForm()) {
+                return;
+            }
+
+            const button = event.target.querySelector('button');
+            const spinner = document.getElementById('spinner');
+            const buttonText = document.getElementById('buttonText');
+            const successMessage = document.getElementById('successMessage');
+
+            // Deshabilitar botón y mostrar spinner
+            button.disabled = true;
+            spinner.style.display = 'inline-block';
+            buttonText.textContent = 'Enviando...';
+
+            try {
+                // Preparar datos del formulario
+                const formData = {
+                    firstName: document.getElementById('firstName').value.trim(),
+                    lastName: document.getElementById('lastName').value.trim(),
+                    email: document.getElementById('email').value.trim(),
+                    promotional: document.getElementById('promotional').checked,
+                    acceptTerms: document.getElementById('acceptTerms').checked
+                };
+
+                // Enviar datos a nuestro backend (seguro)
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || `Error: ${response.status}`);
+                }
+
+                // Mostrar mensaje de éxito
+                successMessage.style.display = 'block';
+                document.getElementById('luxForm').reset();
+
+                // Ocultar mensaje después de 5 segundos
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                }, 5000);
+
+                // Recargar formulario después de 3 segundos
+                setTimeout(() => {
+                    location.reload();
+                }, 3000);
+
+            } catch (error) {
+                console.error('Error al enviar el formulario:', error);
+                alert('Hubo un error al enviar tu registro. Por favor, intenta de nuevo.');
+            } finally {
+                // Restaurar estado del botón
+                button.disabled = false;
+                spinner.style.display = 'none';
+                buttonText.textContent = 'Enviar Registro';
+            }
+        }
+
+        // Hacer que los enlaces de privacidad sean clickeables en el texto
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.terms-link').forEach(link => {
+                link.style.cursor = 'pointer';
+                link.style.color = '#667eea';
+                link.style.textDecoration = 'underline';
+            });
+        });
+    </script>
+    </body>
+</html>
