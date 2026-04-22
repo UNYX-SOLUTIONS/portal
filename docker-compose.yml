@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - FIREBASE_CREDENTIALS_FILE=serviceAccountKey.json
+      - FIREBASE_DATABASE_URL=${FIREBASE_DATABASE_URL}
+    volumes:
+      - ./serviceAccountKey.json:/app/serviceAccountKey.json:ro
+    restart: unless-stopped
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
