@@ -1,14 +1,71 @@
+# Dependencias y logs
 node_modules
 npm-debug.log
+yarn-debug.log
+yarn-error.log
+.npm
+
+# Control de versión
 .git
 .gitignore
+.gitattributes
+
+# Documentación y archivos del proyecto
 README.md
 QUICKSTART.md
 FIREBASE_SETUP.md
+OMADA_INTEGRATION.md
+OMADA_CLOUD_SETUP.md
+OMADA_QUICK_START.md
+DEPLOYMENT_VPS.md
+DOCKER_DEPLOYMENT.md
+SERVER_INTEGRATION_EXAMPLE.js
+FORM_INTEGRATION_EXAMPLE.js
+
+# IDE y editores
 .vscode
 .idea
+.DS_Store
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+
+# Testing y CI/CD
+.github
+.gitlab-ci.yml
+.circleci
+test
+coverage
+*.test.js
+
+# Archivos de entorno
+.env
+.env.local
+.env.*.local
 .env.example
+
+# Logs y archivos temporales
+logs
+*.log
+tmp
+temp
+.cache
+
+# Sistemas de archivos
+.DS_Store
+Thumbs.db
+
+# Archivos de construcción
 dist
 build
-.DS_Store
-*.log
+.next
+out
+
+# Otros archivos innecesarios
+docker-compose*.yml
+Dockerfile
+.dockerignore
+nginx.conf
+ssl/
+

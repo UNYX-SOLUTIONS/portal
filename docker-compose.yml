@@ -2,20 +2,84 @@ version: '3.8'
 
 services:
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lux-viajes-portal
+    image: lux-viajes-portal:latest
     ports:
       - "3000:3000"
     environment:
-      - NODE_ENV=production
+      # Node.js
+      - NODE_ENV=${NODE_ENV:-production}
       - PORT=3000
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+      
+      # Firebase
       - FIREBASE_CREDENTIALS_FILE=serviceAccountKey.json
       - FIREBASE_DATABASE_URL=${FIREBASE_DATABASE_URL}
+      
+      # Omada Cloud
+      - OMADA_CONTROLLER_IP=${OMADA_CONTROLLER_IP:-use1-omada-cloud.tplinkcloud.com}
+      - OMADA_CONTROLLER_PORT=${OMADA_CONTROLLER_PORT:-443}
+      - OMADA_CONTROLLER_ID=${OMADA_CONTROLLER_ID}
+      - OMADA_USERNAME=${OMADA_USERNAME}
+      - OMADA_PASSWORD=${OMADA_PASSWORD}
+      - OMADA_AUTH_DURATION=${OMADA_AUTH_DURATION:-3600000}
+    
     volumes:
       - ./serviceAccountKey.json:/app/serviceAccountKey.json:ro
+      - ./logs:/app/logs
+    
+    # Health check
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    
     restart: unless-stopped
+    
+    # Limites de recursos
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+        reservations:
+          cpus: '0.5'
+          memory: 256M
+    
+    # Logging
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+        labels: "app=lux-viajes-portal"
+    
     networks:
       - app-network
+
+  # (Opcional) Nginx como proxy reverso
+  # nginx:
+  #   image: nginx:alpine
+  #   container_name: lux-viajes-nginx
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - ./nginx.conf:/etc/nginx/nginx.conf:ro
+  #     - ./ssl:/etc/nginx/ssl:ro
+  #   depends_on:
+  #     - app
+  #   networks:
+  #     - app-network
+  #   restart: unless-stopped
 
 networks:
   app-network:
     driver: bridge
+    driver_opts:
+      com.docker.network.bridge.name: br-lux-viajes
